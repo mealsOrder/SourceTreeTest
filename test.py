@@ -1,10 +1,14 @@
 import random
 import string
 import names
+import numpy as np
 
 construction_list = ['아파트', '오피스텔', '원룸', '투룸', '빌라', '옥탑방', '반지하', '단독주택', '컨테이너']
 location_list = ['하단동', '거제동', '사직동', '연산동', '부전동', '명장동', '안락동', '낙민동', '명륜동', '수안동', '온천동', '칠산동', '대연동', '문현동']
 company_list = ['현대', '롯데', '대우', '럭키', '쌍용', '동원', '한화', '포스코', 'SK', '두산', '삼성']
+favorite_list = ['게임', '축구', '독서', '탁구', '산책', '달리기', '싸움', '태권도', '유도', '춤', '노래', '음악', '자전거']
+gn_number1 = 50
+gn_number2 = 10
 
 
 # test
@@ -13,7 +17,19 @@ company_list = ['현대', '롯데', '대우', '럭키', '쌍용', '동원', '한
 # BMS
 class BMS:
     def __init__(self):
-        pass
+        item_db = None
+
+    def generate(self, gn_number1, gn_number2, item):
+        item_db = ItemDB(item)
+        user_db = UserDB(item)
+        for i in range(gn_number1):
+            item_db.add(item)
+
+        for i in range(gn_number2):
+            user_db.set_2D_list()
+        # def generate_db(self, db):
+        #     items = ItemDB(50000)
+        #     users = UserDB(10000)
 
     def set_item(self):
         name = names.get_first_name(gender='female')
@@ -60,6 +76,7 @@ class BMS:
     # 구동
     def run(self):
         # test_items = ["Mary", 81, 1886, "옥탑방", "온천동", "럭키", "gluc.img", 8.25]
+        linked_item_list = []
         items_list = []
         search_list = []
         # load_items(items_list)
@@ -135,7 +152,7 @@ class Node:
 
 # ItemBD :  Linked Structure 클래스
 # 부모 : BMS 클래스
-class ItemDB(BMS):
+class ItemDB:
     def __init__(self, item):
         self.head = Node(item)
 
@@ -217,14 +234,28 @@ class ItemDB(BMS):
 
 # UserDB ADT
 class UserDB:  # 2D List
-    def __init__(self, num):
-        self.num = num
+    def __init__(self, name, age, favorite):
+        self.name = name
+        self.age = age
+        self.favorite = favorite
+
+    def set_2D_list(self, num):
+        list_2D = [num][3]
+        for i in range(num):
+            for j in range(3):
+                if (j % 3 == 0):
+                    list_2D[i][j] = names.get_first_name(gender='female')
+                if (j % 2 == 1):
+                    list_2D[i][j] = random.randint(10, 100)
+                if (j % 3 == 2):
+                    list_2D[i][j] = random.choice(favorite_list)
+        return list_2D
 
 
 if __name__ == "__main__":
-    real = RealEstate("w", 2, 3, "w", "w", 6, 7, 8.0)
     bms = BMS()
-    bms.run()
+    # bms.run()
+    bms.generate(gn_number1, gn_number2, bms.set_item())
     linked_list = ItemDB(bms.set_item())
     linked_list.add(bms.set_item())
 
