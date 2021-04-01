@@ -1,14 +1,112 @@
-import names
 import random
 import string
+import names
 
 construction_list = ['아파트', '오피스텔', '원룸', '투룸', '빌라', '옥탑방', '반지하', '단독주택', '컨테이너']
 location_list = ['하단동', '거제동', '사직동', '연산동', '부전동', '명장동', '안락동', '낙민동', '명륜동', '수안동', '온천동', '칠산동', '대연동', '문현동']
 company_list = ['현대', '롯데', '대우', '럭키', '쌍용', '동원', '한화', '포스코', 'SK', '두산', '삼성']
 
-test_list = []
+
+# test
+# 테스트코드
+
+# BMS
+class BMS:
+    def __init__(self):
+        pass
+
+    def set_item(self):
+        name = names.get_first_name(gender='female')
+        price = random.randint(30, 100)
+        deposit = random.randint(300, 2000)
+        construction = random.choice(construction_list)
+        location = random.choice(location_list)
+        company = random.choice(company_list)
+        img = ''.join(random.choice(string.ascii_lowercase) for i in range(4)) + ".img"
+        rate = round(random.uniform(1, 10), 2)
+        items = RealEstate(name, price, deposit, construction, location, company, img, rate)
+        return items
+
+    # 메뉴 출력
+    def print_menu(self):
+        print("1. 아이템 셋팅")
+        print("2. 아이템 출력")
+        print("3. 아이템 삭제")
+        print("4. 아이템 검색")
+        print("5. 종료")
+        menu = input("메뉴 선택: ")
+        return int(menu)
+
+    # 아이템 출력
+    def print_items(self, items_list):
+        for items in items_list:
+            items.print_info()
+
+    # 아이템 삭제
+    def delete_items(self, items_list, name):
+        for i in range(len(items_list)):
+            for j, items in enumerate(items_list):
+                if items.name == name:
+                    del items_list[j]
+                    print("해당 데이터가 삭제되었습니다.")
+
+    # 아이템 검색
+    def search_items(self, items_list, name):
+        for i in range(len(items_list)):
+            for j, items in enumerate(items_list):
+                if items.name == name:
+                    return items_list[j]
+
+    # 구동
+    def run(self):
+        # test_items = ["Mary", 81, 1886, "옥탑방", "온천동", "럭키", "gluc.img", 8.25]
+        items_list = []
+        search_list = []
+        # load_items(items_list)
+        while True:
+            menu = self.print_menu()
+            if menu == 1:
+                number = int(input("생성할 개수: "))
+                for i in range(number):
+                    items = self.set_item()
+                    items_list.append(items)
+                self.print_items(items_list)
+
+            elif menu == 2:
+                self.print_items(items_list)
+            elif menu == 3:
+                name = input("Name : ")
+                self.delete_items(items_list, name)
+                self.print_items(items_list)
+            elif menu == 4:
+                search_list = []
+                name = input("Name : ")
+                search_list.append(self.search_items(items_list, name))
+                self.print_items(search_list)
+            else:
+                # store_items(items_list)
+                break
+    # # 데이터베이스 생성
+    # def generate_db(self, db):
+    #     items = ItemDB(50000)
+    #     users = UserDB(10000)
+    #
+    # # 통합검색
+    # def integrated_search(self, keyword):
+    #     result = []
+    #     return result
+    #
+    # # ITEM DB 데이터베이스만 정렬
+    # def integrated_sort(self, order_by='asc'):
+    #     pass
+    #
+    # # 통합 삭제
+    # def integrated_delete(self, keyword):
+    #     n_delete = 0
+    #     return n_delete
 
 
+# 부동산 클래스
 class RealEstate:
     def __init__(self, name, price, deposit, construction, location, company, img, rate):
         self.name = name  # 문자열, 건물 이름
@@ -24,30 +122,8 @@ class RealEstate:
     def print_info(self):
         print(self.name, self.price, self.deposit, self.construction, self.location, self.company, self.img, self.rate)
 
-
-# BMS
-class BMS:
-    def __init__(self):
+    def storage_info(self):
         pass
-
-    # 데이터베이스 생성
-    def generate_db(self, db):
-        items = ItemDB(50000)
-        users = UserDB(10000)
-
-    # 통합검색
-    def integrated_search(self, keyword):
-        result = []
-        return result
-
-    # ITEM DB 데이터베이스만 정렬
-    def integrated_sort(self, order_by='asc'):
-        pass
-
-    # 통합 삭제
-    def integrated_delete(self, keyword):
-        n_delete = 0
-        return n_delete
 
 
 # 링크드 구조 사용하기위한 노드 클래스
@@ -57,7 +133,7 @@ class Node:
         self.next = None
 
 
-# ItemBD :  Linked Structure
+# ItemBD :  Linked Structure 클래스
 # 부모 : BMS 클래스
 class ItemDB(BMS):
     def __init__(self, item):
@@ -145,85 +221,13 @@ class UserDB:  # 2D List
         self.num = num
 
 
-def set_item():
-    name = names.get_first_name(gender='female')
-    price = random.randint(30, 100)
-    deposit = random.randint(300, 2000)
-    construction = random.choice(construction_list)
-    location = random.choice(location_list)
-    company = random.choice(company_list)
-    img = ''.join(random.choice(string.ascii_lowercase) for i in range(4)) + ".img"
-    rate = round(random.uniform(1, 10), 2)
-    items = RealEstate(name, price, deposit, construction, location, company, img, rate)
-    return items
-
-
-# 메뉴 출력
-def print_menu():
-    print("1. 아이템 셋팅")
-    print("2. 아이템 출력")
-    print("3. 아이템 삭제")
-    print("4. 아이템 검색")
-    print("5. 종료")
-    menu = input("메뉴 선택: ")
-    return int(menu)
-
-
-# 아이템 출력
-def print_items(items_list):
-    for items in items_list:
-        items.print_info()
-
-
-# 아이템 삭제
-def delete_items(items_list, name):
-    for i in range(len(items_list)):
-        for j, items in enumerate(items_list):
-            if items.name == name:
-                del items_list[j]
-                print("해당 데이터가 삭제되었습니다.")
-
-
-# 아이템 검색
-def search_items(items_list, name):
-    for i in range(len(items_list)):
-        for j, items in enumerate(items_list):
-            if items.name == name:
-                return items_list[j]
-
-
-# 실행
-def run():
-    # test_items = ["Mary", 81, 1886, "옥탑방", "온천동", "럭키", "gluc.img", 8.25]
-    items_list = []
-    search_list = []
-    # load_items(items_list)
-    while True:
-        menu = print_menu()
-        if menu == 1:
-            number = int(input("생성할 개수: "))
-            for i in range(number):
-                items = set_item()
-                items_list.append(items)
-            print_items(items_list)
-
-        elif menu == 2:
-            print_items(items_list)
-        elif menu == 3:
-            name = input("Name : ")
-            delete_items(items_list, name)
-            print_items(items_list)
-        elif menu == 4:
-            search_list = []
-            name = input("Name : ")
-            search_list.append(search_items(items_list, name))
-            print_items(search_list)
-        else:
-            # store_items(items_list)
-            break
-
-
 if __name__ == "__main__":
-    run()
+    real = RealEstate("w", 2, 3, "w", "w", 6, 7, 8.0)
+    bms = BMS()
+    bms.run()
+    linked_list = ItemDB(bms.set_item())
+    linked_list.add(bms.set_item())
+
+    linked_list.print_list()
     # real1 = RealEstate()
     # real1.print_info()
